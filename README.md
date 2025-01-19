@@ -83,3 +83,60 @@ Once the Docker containers are up and running, you can access the application at
 ```
 http://localhost:8080
 ```
+
+## CI/CD Setup Instructions
+
+### Prerequisites
+
+- GitHub account
+- Repository on GitHub
+
+### GitHub Actions Configuration
+
+1. Create a directory for GitHub Actions workflows:
+   ```sh
+   mkdir -p .github/workflows
+   ```
+
+2. Create a CI configuration file:
+   ```sh
+   touch .github/workflows/ci.yml
+   ```
+
+3. Add the following content to the `ci.yml` file:
+   ```yaml
+   name: CI
+
+   on:
+     push:
+       branches:
+         - main
+     pull_request:
+       branches:
+         - main
+
+   jobs:
+     build:
+       runs-on: ubuntu-latest
+
+       steps:
+         - name: Checkout code
+           uses: actions/checkout@v2
+
+         - name: Set up JDK 21
+           uses: actions/setup-java@v2
+           with:
+             java-version: '21'
+
+         - name: Build with Gradle
+           run: ./gradlew build
+
+         - name: Run tests
+           run: ./gradlew test
+
+         - name: Build Docker image
+           run: docker-compose build
+
+         - name: Deploy Docker container
+           run: docker-compose up -d
+   ```
