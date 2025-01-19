@@ -1,5 +1,5 @@
 # Use openjdk:21-jdk-alpine as the base image
-FROM openjdk:21-jdk-alpine
+FROM bellsoft/liberica-openjdk-alpine:23.0.1-13
 
 # Set the working directory
 WORKDIR /app
