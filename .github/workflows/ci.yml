@@ -5,12 +5,12 @@ on:
     branches: [ master ]
 
 env:
-  AWS_REGION: us-east-2                             # set this to your preferred AWS region, e.g. us-west-1
-  ECR_REPOSITORY: studies/bankdev                   # set this to your Amazon ECR repository name
-  ECS_SERVICE: studies01                            # set this to your Amazon ECS service name
-  ECS_CLUSTER: studies-cluster                      # set this to your Amazon ECS cluster name
-  ECS_TASK_DEFINITION: .aws/task-definition.json    # set this to the path to your Amazon ECS task definition
-  CONTAINER_NAME: bankdev-container                 # set this to the name of the container in task definition
+  AWS_REGION: us-east-2
+  ECR_REPOSITORY: studies/bankdev
+  ECS_SERVICE: studies01
+  ECS_CLUSTER: studies-cluster
+  ECS_TASK_DEFINITION: .aws/task-definition.json
+  CONTAINER_NAME: bankdev-container
 
 permissions:
   contents: read
@@ -50,13 +50,13 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          # Build a docker container and push it to ECR so that it can be deployed to ECS.
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_ENV
 
     outputs:
-      image: ${{ env.image }}
+      image: ${{ steps.build-image.outputs.image }}
 
   deploy:
     name: Deploy to ECS
