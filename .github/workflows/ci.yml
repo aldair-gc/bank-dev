@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      image: ${{ steps.set-image-uri.outputs.image }}
+      image: ${{ steps.build-image.outputs.image }}
 
     steps:
       - name: Checkout
