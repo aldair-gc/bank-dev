@@ -80,14 +80,13 @@ jobs:
           VPS_HOST: ${{ secrets.VPS_HOST }}
           VPS_USER: ${{ secrets.VPS_USER }}
           VPS_PORT: ${{ secrets.VPS_PORT }}
-          DOCKER_IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
         run: |
           eval "$(ssh-agent -s)"
           echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
           ssh -o StrictHostKeyChecking=no -p $VPS_PORT $VPS_USER@$VPS_HOST << 'EOF'
-          docker inspect $DOCKER_IMAGE > /dev/null 2>&1
-          docker stop $DOCKER_IMAGE
-          docker rmi $DOCKER_IMAGE:latest
-          docker pull $DOCKER_IMAGE@${{ steps.push.outputs.digest }}
-          docker run -d -p $SERVER_APP_PORT:8080 $DOCKER_IMAGE@${{ steps.push.outputs.digest }}
+          docker inspect ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} > /dev/null 2>&1
+          docker stop ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          docker rmi ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.push.outputs.digest }}
+          docker run -d -p $SERVER_APP_PORT:8080 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.push.outputs.digest }}
           EOF
