@@ -12,7 +12,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.aldair-gc }}/bank-dev
+  IMAGE_NAME: github.aldair-gc/bank-dev
   SERVER_APP_PORT: 3030
 
 jobs:
