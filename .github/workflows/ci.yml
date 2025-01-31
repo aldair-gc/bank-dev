@@ -13,7 +13,6 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: aldair-gc/bank-dev
-  SERVER_APP_PORT: 3030
 
 jobs:
   deploy:
@@ -88,5 +87,5 @@ jobs:
           docker stop ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           docker rmi ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.push.outputs.digest }}
-          docker run -d -p ${{ env.SERVER_APP_PORT }}:8080 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.push.outputs.digest }}
+          docker run -d ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.push.outputs.digest }}
           EOF
