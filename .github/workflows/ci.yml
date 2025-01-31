@@ -28,7 +28,7 @@ jobs:
     environment: production
 
     services:
-      postgres:
+      bank-dev_db:
         image: postgres:16.3
         env:
           POSTGRES_DB: bank_dev
